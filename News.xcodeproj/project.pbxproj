@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E42FF13425FE6B64005C1D6A /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42FF13325FE6B64005C1D6A /* News.swift */; };
 		E632A36925F51F620067E3C7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E632A36825F51F620067E3C7 /* Extensions.swift */; };
 		E632A36D25F522790067E3C7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E632A36C25F522790067E3C7 /* Constants.swift */; };
 		E68481FE25F4E9EA00926000 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68481FD25F4E9EA00926000 /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E42FF13325FE6B64005C1D6A /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		E632A36825F51F620067E3C7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E632A36C25F522790067E3C7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E68481FA25F4E9EA00926000 /* News.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = News.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				E684820625F4E9EA00926000 /* News.xcdatamodeld */,
+				E42FF13325FE6B64005C1D6A /* News.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				E684821925F4EC0D00926000 /* TableViewCell.swift in Sources */,
 				E69EFED025F51B4500DA86AF /* NetworkService.swift in Sources */,
 				E632A36D25F522790067E3C7 /* Constants.swift in Sources */,
+				E42FF13425FE6B64005C1D6A /* News.swift in Sources */,
 				E632A36925F51F620067E3C7 /* Extensions.swift in Sources */,
 				E69EFEC325F515C700DA86AF /* WebVC.swift in Sources */,
 				E684821625F4EC0200926000 /* TableViewController.swift in Sources */,

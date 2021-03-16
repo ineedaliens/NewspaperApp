@@ -5,26 +5,36 @@
 //  Created by Евгений on 07.03.2021.
 //
 
-import Foundation
+import UIKit
 
 class NetworkService {
     
-    var newsdata: Array<Dictionary<String, Any>>?
-    var newsDataHandler: ((Array<Dictionary<String, Any>>?) -> Void?)!
-    
-    func fetchData() {
-        let urlString = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=\(apiKey)"
-        guard let url = URL(string: urlString) else { return }
+   static func fetchData(url: String, completion: @escaping (_ newsdata: News)->()) {
+        guard let url = URL(string: url) else { return }
         let session = URLSession.shared
         session.dataTask(with: url) { (data, responce, error) in
             guard let data = data else { return }
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as! Dictionary<String, Any>
-                let results = json["results"] as! Array<Dictionary<String, Any>>
-                self.newsdata = results
-                self.newsDataHandler?(self.newsdata)
+                let decoder = JSONDecoder()
+//                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let newsdata = try decoder.decode(News.self, from: data)
+                print(newsdata)
+                completion(newsdata)
             } catch {
                 print(error.localizedDescription)
+            }
+        }
+        .resume()
+    }
+    
+    static func downloadImage(url: String, indexPath: IndexPath, completion: @escaping (_ image: UIImage)->()) {
+        guard let url = URL(string: url) else { return }
+        let session = URLSession.shared
+        session.dataTask(with: url) { (data, responce, error) in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    completion(image)
+                }
             }
         }
         .resume()

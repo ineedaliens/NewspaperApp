@@ -9,20 +9,17 @@ import UIKit
 
 class TableViewController: UITableViewController {
     
-    var newsdata: Array<Dictionary<String, Any>>?
-    var networkService = NetworkService()
-    var imageData: Array<Dictionary<String, Any>>?
+    var newsdata: News?
+    private let url = "https://api.nytimes.com/svc/topstories/v2/home.json?api-key=\(apiKey)"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "",style: .plain, target: nil ,action: nil)
-        networkService.fetchData()
-        networkService.newsDataHandler = { news in
-            self.newsdata = news
+        NetworkService.fetchData(url: url) { (newsdata) in
+            self.newsdata = newsdata
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-            return nil
         }
     }
     
@@ -33,15 +30,26 @@ class TableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let news = newsdata else { return 0 }
-        return news.count
+        guard let news = newsdata?.results.count else {return 0}
+        return news
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCell
+        let newsdatas = newsdata?.results[indexPath.row]
         
-        configureCell(cell: cell, for: indexPath)
+        let urlImage = newsdata?.results[indexPath.row].multimedia[indexPath.section].url
+        
+        cell.titleLabel.text = newsdatas?.title
+        cell.abstractLabel.text = newsdatas?.abstract
+        cell.sectionLabel.text = newsdatas?.section
+        NetworkService.downloadImage(url: urlImage!, indexPath: indexPath) { (image) in
+            DispatchQueue.main.async {
+                cell.imageViews.image = image
+            }
+        }
+        
         
         return cell
     }
@@ -56,7 +64,7 @@ class TableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .normal, title: "Delete", handler: { _,_,_  in
-            self.newsdata?.remove(at: indexPath.row)
+//            self.newsdata?.results.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .fade)
         })
         
@@ -69,12 +77,9 @@ class TableViewController: UITableViewController {
         if segue.identifier == "web" {
             guard let news = newsdata else { return }
             if let indexPath = tableView.indexPathForSelectedRow {
-                guard let row = news[indexPath.row] as? Dictionary<String, Any> else { return }
-                guard let url = row["url"] as? String else { return }
-                guard let title = row["title"] as? String else { return }
                 let dvc = segue.destination as! WebVC
-                dvc.urlPage = url
-                dvc.head = title
+                dvc.urlPage = news.results[indexPath.row].url!
+                dvc.head = news.results[indexPath.row].title
             }
         }
     }
